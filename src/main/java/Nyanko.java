@@ -10,8 +10,6 @@ public class Nyanko {
                 + "ok fine... your task has been added! \n"
                 + "added: ";
         String toDoListMessage = "ok you funny soul here's your to do list:\n";
-        String markAsDoneMessage = "zzzz... oh WHAT you're done already?\n";
-        String markAsNotDoneMessage = "I knew it! You're not done!\n";
         String othersMessage = "Whot on earth are you saying!!!\n";
         System.out.println(greeting);
 
@@ -35,14 +33,10 @@ public class Nyanko {
                 }
             } else if (str.startsWith("mark ")) {
                 int taskIndex = Integer.parseInt(str.substring(5)) - 1;
-                toDoList[taskIndex].markAsDone();
-                System.out.println(markAsDoneMessage);
-                System.out.println("  " + toDoList[taskIndex].toString());
+                markAsDone(toDoList[taskIndex]);
             } else if (str.startsWith("unmark ")) {
                 int taskIndex = Integer.parseInt(str.substring(7)) - 1;
-                toDoList[taskIndex].markAsNotDone();
-                System.out.println(markAsNotDoneMessage);
-                System.out.println("  " + toDoList[taskIndex].toString());
+                markAsNotDone(toDoList[taskIndex]);
             } else if (str.startsWith("deadline ")) {
                 System.out.println("When is it due?");
                 String by = scn.nextLine();
@@ -68,7 +62,21 @@ public class Nyanko {
                 System.out.println(othersMessage);
             }
         }
+    }
 
+    public static void markAsDone(Task task) {
+        String markAsDoneMessage = "zzzz... oh WHAT you're done already?\n";
 
+        task.markAsDone();
+        System.out.println(markAsDoneMessage);
+        System.out.println("  " + task.toString());
+    }
+
+    public static void markAsNotDone(Task task) {
+        String markAsNotDoneMessage = "I knew it! You're not done!\n";
+
+        task.markAsNotDone();
+        System.out.println(markAsNotDoneMessage);
+        System.out.println("  " + task.toString() + "\n");
     }
 }
