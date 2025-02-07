@@ -18,12 +18,20 @@ public class Nyanko {
 
         //Solution for scanner input inspired by https://www.geeksforgeeks.org/how-to-take-input-from-user-in-java/
         Scanner scn = new Scanner(System.in);
+
         while (true) {
-            String str = scn.nextLine();
-            if (str.equals("bye")) {
+            //Solution for splitting the command and argument inspired by Java Chatbot in ChatGPT
+            String userInput = scn.nextLine();
+            String[] parts = userInput.split(" ", 2);
+            String command = parts[0].toLowerCase();
+            String argument = parts.length > 1 ? parts[1] : "";
+
+            switch (command) {
+            case "bye":
                 System.out.println("Good night... I'm going to nap zzzzz");
-                break;
-            } else if (str.equals("list")) {
+                return;
+
+            case "list":
                 System.out.println(toDoListMessage);
                 for (int i = 0; i < index; i++) {
                     String nextToDoListMessage = (i + 1)
@@ -31,35 +39,48 @@ public class Nyanko {
                             + toDoList[i].toString();
                     System.out.println(nextToDoListMessage);
                 }
-            } else if (str.startsWith("mark ")) {
-                int taskIndex = Integer.parseInt(str.substring(5)) - 1;
+                break;
+
+            case "mark":
+                int taskIndex = Integer.parseInt(argument) - 1;
                 markAsDone(toDoList[taskIndex]);
-            } else if (str.startsWith("unmark ")) {
-                int taskIndex = Integer.parseInt(str.substring(7)) - 1;
+                break;
+
+            case "unmark":
+                taskIndex = Integer.parseInt(argument) - 1;
                 markAsNotDone(toDoList[taskIndex]);
-            } else if (str.startsWith("deadline ")) {
+                break;
+
+            case "deadline":
                 System.out.println("When is it due?");
                 String by = scn.nextLine();
-                toDoList[index] = new Deadline(str.substring(9), by);
+                toDoList[index] = new Deadline(argument, by);
                 System.out.println(listMessage + toDoList[index].toString());
                 System.out.println("Oh my! You have " + (index + 1) + " tasks!");
                 index++;
-            } else if (str.startsWith("todo ")) {
-                toDoList[index] = new ToDo(str.substring(5));
+                break;
+
+            case "todo":
+                toDoList[index] = new ToDo(argument);
                 System.out.println(listMessage + toDoList[index].toString());
                 System.out.println("Oh my! You have " + (index + 1) + " tasks!");
                 index++;
-            } else if (str.startsWith("event ")) {
+                break;
+
+            case "event":
                 System.out.println("When does it start?");
                 String from = scn.nextLine();
                 System.out.println("When does it end?");
                 String to = scn.nextLine();
-                toDoList[index] = new Event(str.substring(6), from, to);
+                toDoList[index] = new Event(argument, from, to);
                 System.out.println(listMessage + toDoList[index].toString());
                 System.out.println("Oh my! You have " + (index + 1) + " tasks!");
                 index++;
-            } else {
+                break;
+
+            default:
                 System.out.println(othersMessage);
+                break;
             }
         }
     }
