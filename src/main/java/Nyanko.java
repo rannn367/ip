@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Nyanko {
@@ -11,7 +12,7 @@ public class Nyanko {
     static String toDoListMessage = "ok you funny soul here's your to do list:\n";
     static String othersMessage = "Whot on earth are you saying!!!\n";
 
-    static Task[] toDoList = new Task[100];
+    static ArrayList<Task> toDoList = new ArrayList<>();
     static int index = 0;
 
     public static void main(String[] args) {
@@ -37,7 +38,7 @@ public class Nyanko {
                 for (int i = 0; i < index; i++) {
                     String nextToDoListMessage = (i + 1)
                             + ". "
-                            + toDoList[i].toString();
+                            + toDoList.get(i).toString();
                     System.out.println(nextToDoListMessage);
                 }
                 break;
@@ -47,7 +48,7 @@ public class Nyanko {
                 taskIndex = Integer.parseInt(argument) - 1;
                 try {
                     validateTaskNumber(taskIndex);
-                    markAsDone(toDoList[taskIndex]);
+                    markAsDone(toDoList.get(taskIndex));
                     break;
                 } catch (InvalidTaskNumberException e) {
                     System.out.println(e.getMessage());
@@ -59,7 +60,21 @@ public class Nyanko {
                 taskIndex = Integer.parseInt(argument) - 1;
                 try {
                     validateTaskNumber(taskIndex);
-                    markAsNotDone(toDoList[taskIndex]);
+                    markAsNotDone(toDoList.get(taskIndex));
+                    break;
+                } catch (InvalidTaskNumberException e) {
+                    System.out.println(e.getMessage());
+                } finally {
+                    break;
+                }
+
+            case "delete":
+                taskIndex = Integer.parseInt(argument) - 1;
+                try {
+                    validateTaskNumber(taskIndex);
+                    toDoList.remove(taskIndex);
+                    index--;
+                    System.out.println("You're goofy but I deleted your task");
                     break;
                 } catch (InvalidTaskNumberException e) {
                     System.out.println(e.getMessage());
@@ -70,15 +85,15 @@ public class Nyanko {
             case "deadline":
                 System.out.println("When is it due?");
                 String by = scn.nextLine();
-                toDoList[index] = new Deadline(argument, by);
-                System.out.println(listMessage + toDoList[index].toString());
+                toDoList.add(new Deadline(argument, by));
+                System.out.println(listMessage + toDoList.get(index).toString());
                 System.out.println("Oh my! You have " + (index + 1) + " tasks!");
                 index++;
                 break;
 
             case "todo":
-                toDoList[index] = new ToDo(argument);
-                System.out.println(listMessage + toDoList[index].toString());
+                toDoList.add(new ToDo(argument));
+                System.out.println(listMessage + toDoList.get(index).toString());
                 System.out.println("Oh my! You have " + (index + 1) + " tasks!");
                 index++;
                 break;
@@ -88,8 +103,8 @@ public class Nyanko {
                 String from = scn.nextLine();
                 System.out.println("When does it end?");
                 String to = scn.nextLine();
-                toDoList[index] = new Event(argument, from, to);
-                System.out.println(listMessage + toDoList[index].toString());
+                toDoList.add(new Event(argument, from, to));
+                System.out.println(listMessage + toDoList.get(index).toString());
                 System.out.println("Oh my! You have " + (index + 1) + " tasks!");
                 index++;
                 break;
@@ -118,7 +133,7 @@ public class Nyanko {
     }
 
     public static void validateTaskNumber(int taskIndex) throws InvalidTaskNumberException {
-        if (index == 0 || taskIndex > index || taskIndex < 0) {
+        if (taskIndex >= index || taskIndex < 0) {
             throw new InvalidTaskNumberException("You are cuckoo! There's only "
                     + index + " tasks! Task number " + (taskIndex + 1) + " is invalid!!");
         }
