@@ -2,6 +2,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Nyanko {
+    enum Command {
+        BYE, LIST, MARK, UNMARK, DELETE, DEADLINE, TODO, EVENT, INVALID
+    }
+
     static String name = "NYANKO\n";
     static String greeting = "HEEHAW I'M " + name
             + "Today's a good day to chill and slack!\n"
@@ -25,15 +29,15 @@ public class Nyanko {
             //Solution for splitting the command and argument inspired by Java Chatbot in ChatGPT
             String userInput = scn.nextLine();
             String[] parts = userInput.split(" ", 2);
-            String command = parts[0].toLowerCase();
+            Command command = getCommand(parts[0]);
             String argument = parts.length > 1 ? parts[1] : "";
 
             switch (command) {
-            case "bye":
+            case BYE:
                 System.out.println("Good night... I'm going to nap zzzzz");
                 return;
 
-            case "list":
+            case LIST:
                 System.out.println(toDoListMessage);
                 for (int i = 0; i < index; i++) {
                     String nextToDoListMessage = (i + 1)
@@ -43,7 +47,7 @@ public class Nyanko {
                 }
                 break;
 
-            case "mark":
+                case MARK:
                 int taskIndex;
                 taskIndex = Integer.parseInt(argument) - 1;
                 try {
@@ -56,7 +60,7 @@ public class Nyanko {
                     break;
                 }
 
-            case "unmark":
+            case UNMARK:
                 taskIndex = Integer.parseInt(argument) - 1;
                 try {
                     validateTaskNumber(taskIndex);
@@ -68,7 +72,7 @@ public class Nyanko {
                     break;
                 }
 
-            case "delete":
+            case DELETE:
                 taskIndex = Integer.parseInt(argument) - 1;
                 try {
                     validateTaskNumber(taskIndex);
@@ -82,7 +86,7 @@ public class Nyanko {
                     break;
                 }
 
-            case "deadline":
+            case DEADLINE:
                 System.out.println("When is it due?");
                 String by = scn.nextLine();
                 toDoList.add(new Deadline(argument, by));
@@ -91,14 +95,14 @@ public class Nyanko {
                 index++;
                 break;
 
-            case "todo":
+            case TODO:
                 toDoList.add(new ToDo(argument));
                 System.out.println(listMessage + toDoList.get(index).toString());
                 System.out.println("Oh my! You have " + (index + 1) + " tasks!");
                 index++;
                 break;
 
-            case "event":
+            case EVENT:
                 System.out.println("When does it start?");
                 String from = scn.nextLine();
                 System.out.println("When does it end?");
@@ -109,10 +113,18 @@ public class Nyanko {
                 index++;
                 break;
 
-            default:
+            case INVALID:
                 System.out.println(othersMessage);
                 break;
             }
+        }
+    }
+
+    private static Command getCommand(String input) {
+        try {
+            return Command.valueOf(input.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return Command.INVALID;
         }
     }
 
