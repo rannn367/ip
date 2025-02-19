@@ -1,3 +1,9 @@
+package nyanko.command;
+
+import nyanko.storage.Storage;
+import nyanko.task.TaskList;
+import nyanko.ui.Ui;
+
 import java.io.IOException;
 
 public class DeleteCommand extends Command {

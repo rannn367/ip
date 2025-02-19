@@ -1,3 +1,8 @@
+package nyanko.storage;
+
+import nyanko.task.Task;
+import nyanko.task.InvalidTaskFormatException;
+
 import java.io.*;
 import java.util.ArrayList;
 

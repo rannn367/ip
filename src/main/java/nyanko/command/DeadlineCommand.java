@@ -1,10 +1,17 @@
+package nyanko.command;
+
+import nyanko.storage.Storage;
+import nyanko.task.Deadline;
+import nyanko.task.TaskList;
+import nyanko.ui.Ui;
+
 import java.io.IOException;
 import java.time.format.DateTimeParseException;
 
-public class EventCommand extends Command {
+public class DeadlineCommand extends Command {
     private String description;
 
-    public EventCommand(String argument) {
+    public DeadlineCommand(String argument) {
         this.description = argument;
     }
 
@@ -13,13 +20,11 @@ public class EventCommand extends Command {
         while (true) {
             try {
                 ui.showLine();
-                System.out.println("When does it start? (format: yyyy-MM-dd HHmm)");
-                String from = ui.readCommand();
-                System.out.println("When does it end? (format: yyyy-MM-dd HHmm)");
-                String to = ui.readCommand();
-                Event event = new Event(description, from, to);
-                tasks.addTask(event);
-                System.out.println("WOW you're so hardworking\nok fine... your task has been added!\nadded: " + event.toString());
+                System.out.println("When is it due? (format: yyyy-MM-dd HHmm)");
+                String by = ui.readCommand();
+                Deadline deadline = new Deadline(description, by);
+                tasks.addTask(deadline);
+                System.out.println("WOW you're so hardworking\nok fine... your task has been added!\nadded: " + deadline.toString());
                 System.out.println("Oh my! You have " + tasks.size() + " tasks!");
                 storage.save(tasks.getTasks());
                 break;

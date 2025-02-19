@@ -1,3 +1,7 @@
+package nyanko.parser;
+
+import nyanko.command.*;
+
 public class Parser {
     public static Command parse(String fullCommand) {
         String[] parts = fullCommand.split(" ", 2);

@@ -1,43 +1,48 @@
+package nyanko.task;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Deadline extends Task {
+public class Event extends Task {
 
-    protected LocalDateTime by;
+    protected LocalDateTime from;
+    protected LocalDateTime to;
 
-    public Deadline(String description, String by) {
+    public Event(String description, String from, String to) {
         super(description);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
-        this.by = LocalDateTime.parse(by, formatter);
+        this.from = LocalDateTime.parse(from, formatter);
+        this.to = LocalDateTime.parse(to, formatter);
     }
 
     @Override
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy, h:mm a");
-        return "[D]" + super.toString() + " (by: " + this.by.format(formatter) + ")";
+        return "[E]" + super.toString() + " (from: " + this.from.format(formatter) + " to: " + this.to.format(formatter) + ")";
     }
 
     @Override
     public String toSaveFormat() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
-        return String.format("%s|%d|%s|%s", this.getClass().getSimpleName(), isDone ? 1 : 0, description, this.by.format(formatter));
+        return String.format("%s|%d|%s|%s|%s", this.getClass().getSimpleName(), isDone ? 1 : 0, description, this.from.format(formatter), this.to.format(formatter));
     }
 
     public static Task fromSaveFormat(String saveFormat) throws InvalidTaskFormatException {
         String[] parts = saveFormat.split("\\|");
-        if (parts.length < 4) {
+        if (parts.length < 5) {
             throw new InvalidTaskFormatException("Invalid task format: " + saveFormat);
         }
 
         boolean isDone = parts[1].equals("1");
         String description = parts[2];
-        String by = parts[3];
+        String from = parts[3];
+        String to = parts[4];
 
-        Deadline deadline = new Deadline(description, by);
+        Event event = new Event(description, from, to);
         if (isDone) {
-            deadline.markAsDone();
+            event.markAsDone();
         }
 
-        return deadline;
+        return event;
     }
 }

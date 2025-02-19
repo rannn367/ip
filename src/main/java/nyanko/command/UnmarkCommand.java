@@ -1,3 +1,10 @@
+package nyanko.command;
+
+import nyanko.storage.Storage;
+import nyanko.task.Task;
+import nyanko.task.TaskList;
+import nyanko.ui.Ui;
+
 import java.io.IOException;
 
 public class UnmarkCommand extends Command {

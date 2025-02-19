@@ -1,3 +1,13 @@
+package nyanko;
+
+import nyanko.command.Command;
+import nyanko.command.InvalidTaskNumberException;
+import nyanko.parser.Parser;
+import nyanko.storage.Storage;
+import nyanko.task.InvalidTaskFormatException;
+import nyanko.task.TaskList;
+import nyanko.ui.Ui;
+
 import java.io.IOException;
 
 public class Nyanko {

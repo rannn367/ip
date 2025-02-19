@@ -1,3 +1,5 @@
+package nyanko.command;
+
 public class InvalidTaskNumberException extends Exception {
     int argument;
     int numberOfTasks;
