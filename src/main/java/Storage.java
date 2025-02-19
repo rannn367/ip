@@ -9,11 +9,10 @@ public class Storage {
     }
 
     // Load tasks from file
-    public ArrayList<String> load() throws IOException {
-        ArrayList<String> tasks = new ArrayList<>();
+    public ArrayList<Task> load() throws IOException, InvalidTaskFormatException {
+        ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(filePath);
-
-        // If file doesn't exist, create necessary directories and file
+        
         if (!file.exists()) {
             file.getParentFile().mkdirs(); // Create parent directory if needed
             file.createNewFile();
@@ -23,7 +22,8 @@ public class Storage {
         BufferedReader reader = new BufferedReader(new FileReader(file));
         String line;
         while ((line = reader.readLine()) != null) {
-            tasks.add(line);
+            Task task = Task.fromSaveFormat(line);
+            tasks.add(task);
         }
         reader.close();
         return tasks;
