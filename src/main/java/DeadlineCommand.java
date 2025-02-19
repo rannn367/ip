@@ -22,7 +22,7 @@ public class DeadlineCommand extends Command {
                 storage.save(tasks.getTasks());
                 break;
             } catch (DateTimeParseException e) {
-                ui.showError("Invalid date and time format. Please try again.");
+                ui.showError("Your date/time format is incorrect! Don't be dumb! Try again!");
             }
         }
     }

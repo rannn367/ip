@@ -1,211 +1,40 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Nyanko {
-    enum Command {
-        BYE, LIST, MARK, UNMARK, DELETE, DEADLINE, TODO, EVENT, INVALID
+    private Storage storage;
+    private TaskList tasks;
+    private Ui ui;
+
+    public Nyanko(String filePath) {
+        ui = new Ui();
+        storage = new Storage(filePath);
+        try {
+            tasks = new TaskList(storage.load());
+        } catch (IOException | InvalidTaskFormatException e) {
+            ui.showLoadingError();
+            tasks = new TaskList();
+        }
     }
 
-    static String name = "NYANKO\n";
-    static String greeting = "HEEHAW I'M " + name
-            + "Today's a good day to chill and slack!\n"
-            + "zzzzzz";
-    static String listMessage = "WOW you're so hardworking\n"
-            + "ok fine... your task has been added! \n"
-            + "added: ";
-    static String toDoListMessage = "ok you funny soul here's your to do list:\n";
-    static String othersMessage = "Whot on earth are you saying!!!\n";
-
-    static ArrayList<Task> toDoList = new ArrayList<>();
-    static int index = 0;
-    static final String FILE_PATH = "data/nyanko.txt";
+    public void run() {
+        ui.showWelcome();
+        boolean isExit = false;
+        while (!isExit) {
+            try {
+                String fullCommand = ui.readCommand();
+                ui.showLine();
+                Command command = Parser.parse(fullCommand);
+                command.execute(tasks, ui, storage);
+                isExit = command.isExit();
+            } catch (IOException | InvalidTaskNumberException e) {
+                ui.showError(e.getMessage());
+            } finally {
+                ui.showLine();
+            }
+        }
+    }
 
     public static void main(String[] args) {
-        loadTasks();
-        System.out.println(greeting);
-
-        //Solution for scanner input inspired by https://www.geeksforgeeks.org/how-to-take-input-from-user-in-java/
-        Scanner scn = new Scanner(System.in);
-
-        while (true) {
-            //Solution for splitting the command and argument inspired by Java Chatbot in ChatGPT
-            String userInput = scn.nextLine();
-            String[] parts = userInput.split(" ", 2);
-            Command command = getCommand(parts[0]);
-            String argument = parts.length > 1 ? parts[1] : "";
-
-            switch (command) {
-            case BYE:
-                System.out.println("Good night... I'm going to nap zzzzz");
-                return;
-
-            case LIST:
-                System.out.println(toDoListMessage);
-                for (int i = 0; i < index; i++) {
-                    String nextToDoListMessage = (i + 1)
-                            + ". "
-                            + toDoList.get(i).toString();
-                    System.out.println(nextToDoListMessage);
-                }
-                break;
-
-            case MARK:
-                int taskIndex;
-                taskIndex = Integer.parseInt(argument) - 1;
-                try {
-                    validateTaskNumber(taskIndex);
-                    markAsDone(toDoList.get(taskIndex));
-                } catch (InvalidTaskNumberException e) {
-                    System.out.println(e.getMessage());
-                } finally {
-                    saveTasks();
-                }
-                break;
-
-            case UNMARK:
-                taskIndex = Integer.parseInt(argument) - 1;
-                try {
-                    validateTaskNumber(taskIndex);
-                    markAsNotDone(toDoList.get(taskIndex));
-                } catch (InvalidTaskNumberException e) {
-                    System.out.println(e.getMessage());
-                } finally {
-                    saveTasks();
-                }
-                break;
-
-            case DELETE:
-                taskIndex = Integer.parseInt(argument) - 1;
-                try {
-                    validateTaskNumber(taskIndex);
-                    toDoList.remove(taskIndex);
-                    index--;
-                    System.out.println("You're goofy but I deleted your task");
-                } catch (InvalidTaskNumberException e) {
-                    System.out.println(e.getMessage());
-                } finally {
-                    saveTasks();
-                }
-                break;
-
-            case DEADLINE:
-                while (true) {
-                    try {
-                        System.out.println("When is it due? (format: yyyy-MM-dd HHmm)");
-                        String by = scn.nextLine();
-                        toDoList.add(new Deadline(argument, by));
-                        System.out.println(listMessage + toDoList.get(index).toString());
-                        System.out.println("Oh my! You have " + (index + 1) + " tasks!");
-                        index++;
-                        saveTasks();
-                        break;
-                    } catch (DateTimeParseException e) {
-                        System.out.println("Your date/time format is invalid! Don't be dumb!");
-                    }
-                }
-                break;
-
-            case TODO:
-                toDoList.add(new ToDo(argument));
-                System.out.println(listMessage + toDoList.get(index).toString());
-                System.out.println("Oh my! You have " + (index + 1) + " tasks!");
-                index++;
-                saveTasks();
-                break;
-
-            case EVENT:
-                while (true) {
-                    try {
-                        System.out.println("When does it start? (format: yyyy-MM-dd HHmm)");
-                        String from = scn.nextLine();
-                        System.out.println("When does it end? (format: yyyy-MM-dd HHmm)");
-                        String to = scn.nextLine();
-                        toDoList.add(new Event(argument, from, to));
-                        System.out.println(listMessage + toDoList.get(index).toString());
-                        System.out.println("Oh my! You have " + (index + 1) + " tasks!");
-                        index++;
-                        saveTasks();
-                        break;
-                    } catch (DateTimeParseException e) {
-                        System.out.println("Your date/time format is invalid! Don't be dumb!");
-                    }
-                }
-                break;
-
-            case INVALID:
-                System.out.println(othersMessage);
-                break;
-            }
-        }
-    }
-
-    private static Command getCommand(String input) {
-        try {
-            return Command.valueOf(input.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return Command.INVALID;
-        }
-    }
-
-    public static void markAsDone(Task task) {
-        String markAsDoneMessage = "zzzz... oh WHAT you're done already?\n";
-
-        task.markAsDone();
-        System.out.println(markAsDoneMessage);
-        System.out.println("  " + task.toString());
-    }
-
-    public static void markAsNotDone(Task task) {
-        String markAsNotDoneMessage = "I knew it! You're not done!\n";
-
-        task.markAsNotDone();
-        System.out.println(markAsNotDoneMessage);
-        System.out.println("  " + task.toString() + "\n");
-    }
-
-    public static void validateTaskNumber(int taskIndex) throws InvalidTaskNumberException {
-        if (taskIndex >= index || taskIndex < 0) {
-            throw new InvalidTaskNumberException("You are cuckoo! There's only "
-                    + index + " tasks! Task number " + (taskIndex + 1) + " is invalid!!");
-        }
-    }
-
-    private static void saveTasks() {
-        try {
-            File file = new File(FILE_PATH);
-            file.getParentFile().mkdirs();
-            FileWriter fw = new FileWriter(file);
-            for (Task task : toDoList) {
-                fw.write(task.toSaveFormat() + System.lineSeparator());
-            }
-            fw.close();
-        } catch (IOException e) {
-            System.out.println("Error saving tasks: " + e.getMessage());
-        }
-    }
-
-    private static void loadTasks() {
-        try {
-            File file = new File(FILE_PATH);
-            if (file.exists()) {
-                Scanner sc = new Scanner(file);
-                while (sc.hasNextLine()) {
-                    String line = sc.nextLine();
-                    Task task = Task.fromSaveFormat(line);
-                    toDoList.add(task);
-                    index++;
-                }
-                sc.close();
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("Error loading tasks: " + e.getMessage());
-        } catch (InvalidTaskFormatException e) {
-            System.out.println("Data file is corrupted: " + e.getMessage());
-        }
+        new Nyanko("data/nyanko.txt").run();
     }
 }
