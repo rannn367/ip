@@ -13,6 +13,7 @@ public class Storage {
         ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(filePath);
 
+        // If file doesn't exist, create necessary directories and file
         if (!file.exists()) {
             file.getParentFile().mkdirs(); // Create parent directory if needed
             file.createNewFile();
@@ -30,13 +31,12 @@ public class Storage {
     }
 
     // Save tasks to file
-    public void save(ArrayList<String> tasks) throws IOException {
+    public void save(ArrayList<Task> tasks) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
-        for (String task : tasks) {
-            writer.write(task);
+        for (Task task : tasks) {
+            writer.write(task.toSaveFormat());
             writer.newLine();
         }
         writer.close();
     }
 }
-
