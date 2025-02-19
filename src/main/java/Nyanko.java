@@ -93,7 +93,7 @@ public class Nyanko {
                 break;
 
             case DEADLINE:
-                System.out.println("When is it due?");
+                System.out.println("When is it due? (format: yyyy-MM-dd HHmm)");
                 String by = scn.nextLine();
                 toDoList.add(new Deadline(argument, by));
                 System.out.println(listMessage + toDoList.get(index).toString());
@@ -111,9 +111,9 @@ public class Nyanko {
                 break;
 
             case EVENT:
-                System.out.println("When does it start?");
+                System.out.println("When does it start? (format: yyyy-MM-dd HHmm)");
                 String from = scn.nextLine();
-                System.out.println("When does it end?");
+                System.out.println("When does it end? (format: yyyy-MM-dd HHmm)");
                 String to = scn.nextLine();
                 toDoList.add(new Event(argument, from, to));
                 System.out.println(listMessage + toDoList.get(index).toString());
