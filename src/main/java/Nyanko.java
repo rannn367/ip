@@ -1,3 +1,7 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -18,8 +22,10 @@ public class Nyanko {
 
     static ArrayList<Task> toDoList = new ArrayList<>();
     static int index = 0;
+    static final String FILE_PATH = "data/nyanko.txt";
 
     public static void main(String[] args) {
+        loadTasks();
         System.out.println(greeting);
 
         //Solution for scanner input inspired by https://www.geeksforgeeks.org/how-to-take-input-from-user-in-java/
@@ -47,30 +53,30 @@ public class Nyanko {
                 }
                 break;
 
-                case MARK:
+            case MARK:
                 int taskIndex;
                 taskIndex = Integer.parseInt(argument) - 1;
                 try {
                     validateTaskNumber(taskIndex);
                     markAsDone(toDoList.get(taskIndex));
-                    break;
                 } catch (InvalidTaskNumberException e) {
                     System.out.println(e.getMessage());
                 } finally {
-                    break;
+                    saveTasks();
                 }
+                break;
 
             case UNMARK:
                 taskIndex = Integer.parseInt(argument) - 1;
                 try {
                     validateTaskNumber(taskIndex);
                     markAsNotDone(toDoList.get(taskIndex));
-                    break;
                 } catch (InvalidTaskNumberException e) {
                     System.out.println(e.getMessage());
                 } finally {
-                    break;
+                    saveTasks();
                 }
+                break;
 
             case DELETE:
                 taskIndex = Integer.parseInt(argument) - 1;
@@ -79,12 +85,12 @@ public class Nyanko {
                     toDoList.remove(taskIndex);
                     index--;
                     System.out.println("You're goofy but I deleted your task");
-                    break;
                 } catch (InvalidTaskNumberException e) {
                     System.out.println(e.getMessage());
                 } finally {
-                    break;
+                    saveTasks();
                 }
+                break;
 
             case DEADLINE:
                 System.out.println("When is it due?");
@@ -93,6 +99,7 @@ public class Nyanko {
                 System.out.println(listMessage + toDoList.get(index).toString());
                 System.out.println("Oh my! You have " + (index + 1) + " tasks!");
                 index++;
+                saveTasks();
                 break;
 
             case TODO:
@@ -100,6 +107,7 @@ public class Nyanko {
                 System.out.println(listMessage + toDoList.get(index).toString());
                 System.out.println("Oh my! You have " + (index + 1) + " tasks!");
                 index++;
+                saveTasks();
                 break;
 
             case EVENT:
@@ -111,6 +119,7 @@ public class Nyanko {
                 System.out.println(listMessage + toDoList.get(index).toString());
                 System.out.println("Oh my! You have " + (index + 1) + " tasks!");
                 index++;
+                saveTasks();
                 break;
 
             case INVALID:
@@ -148,6 +157,40 @@ public class Nyanko {
         if (taskIndex >= index || taskIndex < 0) {
             throw new InvalidTaskNumberException("You are cuckoo! There's only "
                     + index + " tasks! Task number " + (taskIndex + 1) + " is invalid!!");
+        }
+    }
+
+    private static void saveTasks() {
+        try {
+            File file = new File(FILE_PATH);
+            file.getParentFile().mkdirs();
+            FileWriter fw = new FileWriter(file);
+            for (Task task : toDoList) {
+                fw.write(task.toSaveFormat() + System.lineSeparator());
+            }
+            fw.close();
+        } catch (IOException e) {
+            System.out.println("Error saving tasks: " + e.getMessage());
+        }
+    }
+
+    private static void loadTasks() {
+        try {
+            File file = new File(FILE_PATH);
+            if (file.exists()) {
+                Scanner sc = new Scanner(file);
+                while (sc.hasNextLine()) {
+                    String line = sc.nextLine();
+                    Task task = Task.fromSaveFormat(line);
+                    toDoList.add(task);
+                    index++;
+                }
+                sc.close();
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Error loading tasks: " + e.getMessage());
+        } catch (InvalidTaskFormatException e) {
+            System.out.println("Data file is corrupted: " + e.getMessage());
         }
     }
 }
