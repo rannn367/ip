@@ -12,7 +12,7 @@ public class Storage {
     public ArrayList<Task> load() throws IOException, InvalidTaskFormatException {
         ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(filePath);
-        
+
         if (!file.exists()) {
             file.getParentFile().mkdirs(); // Create parent directory if needed
             file.createNewFile();
