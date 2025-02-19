@@ -1,7 +1,7 @@
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Event extends Task{
+public class Event extends Task {
 
     protected LocalDateTime from;
     protected LocalDateTime to;
@@ -16,15 +16,13 @@ public class Event extends Task{
     @Override
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy, h:mm a");
-        return "[E]" + super.toString()
-                + " (from: " + from.format(formatter) + " to: " + to.format(formatter) + ")\n";
+        return "[E]" + super.toString() + " (from: " + this.from.format(formatter) + " to: " + this.to.format(formatter) + ")";
     }
 
     @Override
     public String toSaveFormat() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
-        return String.format("%s|%d|%s|%s|%s", this.getClass().getSimpleName(),
-                isDone ? 1 : 0, description, from.format(formatter), to.format(formatter));
+        return String.format("%s|%d|%s|%s|%s", this.getClass().getSimpleName(), isDone ? 1 : 0, description, this.from.format(formatter), this.to.format(formatter));
     }
 
     public static Task fromSaveFormat(String saveFormat) throws InvalidTaskFormatException {
