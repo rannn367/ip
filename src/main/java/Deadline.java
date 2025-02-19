@@ -1,20 +1,27 @@
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Deadline extends Task {
 
     protected String by;
 
     public Deadline(String description, String by) {
         super(description);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
         this.by = by;
     }
 
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + by + ")\n";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy, h:mm a");
+        return "[D]" + super.toString() + " (by: " + by.format(String.valueOf(formatter)) + ")\n";
     }
 
     @Override
     public String toSaveFormat() {
-        return String.format("%s|%d|%s|%s", this.getClass().getSimpleName(), isDone ? 1 : 0, description, by);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+        return String.format("%s|%d|%s|%s", this.getClass().getSimpleName(),
+                isDone ? 1 : 0, description, by.format(String.valueOf(formatter)));
     }
 
     public static Task fromSaveFormat(String saveFormat) throws InvalidTaskFormatException {
