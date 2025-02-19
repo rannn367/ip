@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -93,13 +94,20 @@ public class Nyanko {
                 break;
 
             case DEADLINE:
-                System.out.println("When is it due?");
-                String by = scn.nextLine();
-                toDoList.add(new Deadline(argument, by));
-                System.out.println(listMessage + toDoList.get(index).toString());
-                System.out.println("Oh my! You have " + (index + 1) + " tasks!");
-                index++;
-                saveTasks();
+                while (true) {
+                    try {
+                        System.out.println("When is it due? (format: yyyy-MM-dd HHmm)");
+                        String by = scn.nextLine();
+                        toDoList.add(new Deadline(argument, by));
+                        System.out.println(listMessage + toDoList.get(index).toString());
+                        System.out.println("Oh my! You have " + (index + 1) + " tasks!");
+                        index++;
+                        saveTasks();
+                        break;
+                    } catch (DateTimeParseException e) {
+                        System.out.println("Your date/time format is invalid! Don't be dumb!");
+                    }
+                }
                 break;
 
             case TODO:
@@ -111,15 +119,22 @@ public class Nyanko {
                 break;
 
             case EVENT:
-                System.out.println("When does it start?");
-                String from = scn.nextLine();
-                System.out.println("When does it end?");
-                String to = scn.nextLine();
-                toDoList.add(new Event(argument, from, to));
-                System.out.println(listMessage + toDoList.get(index).toString());
-                System.out.println("Oh my! You have " + (index + 1) + " tasks!");
-                index++;
-                saveTasks();
+                while (true) {
+                    try {
+                        System.out.println("When does it start? (format: yyyy-MM-dd HHmm)");
+                        String from = scn.nextLine();
+                        System.out.println("When does it end? (format: yyyy-MM-dd HHmm)");
+                        String to = scn.nextLine();
+                        toDoList.add(new Event(argument, from, to));
+                        System.out.println(listMessage + toDoList.get(index).toString());
+                        System.out.println("Oh my! You have " + (index + 1) + " tasks!");
+                        index++;
+                        saveTasks();
+                        break;
+                    } catch (DateTimeParseException e) {
+                        System.out.println("Your date/time format is invalid! Don't be dumb!");
+                    }
+                }
                 break;
 
             case INVALID:
