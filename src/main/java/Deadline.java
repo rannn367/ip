@@ -11,4 +11,27 @@ public class Deadline extends Task {
     public String toString() {
         return "[D]" + super.toString() + " (by: " + by + ")\n";
     }
+
+    @Override
+    public String toSaveFormat() {
+        return String.format("%s|%d|%s|%s", this.getClass().getSimpleName(), isDone ? 1 : 0, description, by);
+    }
+
+    public static Task fromSaveFormat(String saveFormat) throws InvalidTaskFormatException {
+        String[] parts = saveFormat.split("\\|");
+        if (parts.length < 4) {
+            throw new InvalidTaskFormatException("Invalid task format: " + saveFormat);
+        }
+
+        boolean isDone = parts[1].equals("1");
+        String description = parts[2];
+        String by = parts[3];
+
+        Deadline deadline = new Deadline(description, by);
+        if (isDone) {
+            deadline.markAsDone();
+        }
+
+        return deadline;
+    }
 }
