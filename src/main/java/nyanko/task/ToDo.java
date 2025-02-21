@@ -17,12 +17,20 @@ public class ToDo extends Task {
 
     public static Task fromSaveFormat(String saveFormat) throws InvalidTaskFormatException {
         String[] parts = saveFormat.split("\\|");
-        if (parts.length < 3) {
+        if (parts.length != 3) {
             throw new InvalidTaskFormatException("Invalid task format: " + saveFormat);
+        }
+
+        if (!parts[1].equals("0") && !parts[1].equals("1")) {
+            throw new InvalidTaskFormatException("Invalid completion status in ToDo task: " + parts[1] + ". Expected '0' or '1'.");
         }
 
         boolean isDone = parts[1].equals("1");
         String description = parts[2];
+
+        if (description.isEmpty()) {
+            throw new InvalidTaskFormatException("Invalid ToDo task: description is empty. Data: " + saveFormat);
+        }
 
         ToDo todo = new ToDo(description);
         if (isDone) {

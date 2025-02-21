@@ -10,7 +10,7 @@ public class Task {
     }
 
     public String getStatusIcon() {
-        return (isDone ? "X" : " "); // mark done task with X
+        return (isDone ? "X" : " "); // Mark done task with X
     }
 
     public String getDescription() {
@@ -23,6 +23,10 @@ public class Task {
 
     public void markAsNotDone() {
         this.isDone = false;
+    }
+
+    public boolean isDone() {
+        return isDone;
     }
 
     public String toSaveFormat() {
@@ -41,22 +45,22 @@ public class Task {
 
         Task task;
         switch (type) {
-            case "ToDo":
+        case "ToDo":
                 task = new ToDo(description);
                 break;
-            case "Deadline":
+        case "Deadline":
                 if (parts.length < 4) {
-                    throw new InvalidTaskFormatException("Invalid task format: " + saveFormat);
+                    throw new InvalidTaskFormatException("Invalid deadline format: " + saveFormat);
                 }
                 task = new Deadline(description, parts[3]);
                 break;
-            case "Event":
+        case "Event":
                 if (parts.length < 5) {
-                    throw new InvalidTaskFormatException("Invalid task format: " + saveFormat);
+                    throw new InvalidTaskFormatException("Invalid event format: " + saveFormat);
                 }
                 task = new Event(description, parts[3], parts[4]);
                 break;
-            default:
+        default:
                 throw new InvalidTaskFormatException("Unknown task type: " + type);
         }
 
