@@ -10,31 +10,31 @@ public class Parser {
 
         Command command;
         switch (commandWord.toUpperCase()) {
-            case "BYE":
+        case "BYE":
                 command = new ByeCommand();
                 break;
-            case "LIST":
+        case "LIST":
                 command = new ListCommand();
                 break;
-            case "MARK":
+        case "MARK":
                 command = new MarkCommand(argument);
                 break;
-            case "UNMARK":
+        case "UNMARK":
                 command = new UnmarkCommand(argument);
                 break;
-            case "DELETE":
+        case "DELETE":
                 command = new DeleteCommand(argument);
                 break;
-            case "DEADLINE":
+        case "DEADLINE":
                 command = new DeadlineCommand(argument);
                 break;
-            case "TODO":
+        case "TODO":
                 command = new TodoCommand(argument);
                 break;
-            case "EVENT":
+        case "EVENT":
                 command = new EventCommand(argument);
                 break;
-            default:
+        default:
                 command = new InvalidCommand();
                 break;
         }
