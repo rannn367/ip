@@ -10,11 +10,20 @@ import nyanko.ui.Ui;
 
 import java.io.IOException;
 
+/**
+ * The main entry point for the Nyanko application.
+ * Nyanko is a task manager that supports ToDo, Deadline, and Event tasks.
+ */
 public class Nyanko {
     private Storage storage;
     private TaskList tasks;
     private Ui ui;
 
+    /**
+     * Constructs a new Nyanko instance and initializes storage and task list.
+     *
+     * @param filePath The file path where tasks are stored.
+     */
     public Nyanko(String filePath) {
         ui = new Ui();
         storage = new Storage(filePath);
