@@ -94,8 +94,8 @@ public class Main extends Application {
         String userText = userInput.getText();
         String dukeText = nyanko.getResponse(userInput.getText());
         dialogContainer.getChildren().addAll(
-                new DialogBox(userText, userImage),
-                new DialogBox(dukeText, nyankoImage)
+                DialogBox.getUserDialog(userText, userImage),
+                DialogBox.getNyankoDialog(dukeText, nyankoImage)
         );
         userInput.clear();
     }
