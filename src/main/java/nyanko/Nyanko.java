@@ -25,6 +25,8 @@ public class Nyanko {
      * @param filePath The file path where tasks are stored.
      */
     public Nyanko(String filePath) {
+        assert filePath != null && !filePath.isEmpty() : "File path should not be null or empty";
+        
         ui = new Ui();
         storage = new Storage(filePath);
         try {
