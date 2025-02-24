@@ -1,4 +1,4 @@
-package nyanko;
+package nyanko.GUI;
 
 import javafx.application.Application;
 
