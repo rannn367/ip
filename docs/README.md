@@ -1,30 +1,33 @@
-# Duke User Guide
+# 🐱 Nyanko - Task Manager
 
-// Update the title above to match the actual product name
+> **"A productive cat keeps its tasks on track!"** – Unknown
 
-// Product screenshot goes here
+Nyanko is a **simple, text-based** task manager that helps you keep track of **ToDos, Deadlines, and Events**. It supports **keyword searching**, **task persistence**, and a **friendly GUI built with JavaFX**.
 
-// Product intro goes here
+🚀 Built with **Java 17** and **JavaFX**, Nyanko is designed to be lightweight and fun to use!
 
-## Adding deadlines
+---
 
-// Describe the action and its outcome.
+## 📸 **Product Screenshot**
+![Nyanko Screenshot](./docs/images/nyanko-ui.png)  
+*Screenshot of the GUI version of Nyanko*
 
-// Give examples of usage
+---
 
-Example: `keyword (optional arguments)`
+## ✨ **Features**
 
-// A description of the expected outcome goes here
+- ✅ **Manage Tasks Efficiently**
+- 📌 **Supports Three Types of Tasks** (ToDos, Deadlines, Events)
+- 🔍 **Find Tasks Using Keywords**
+- 💾 **Persistent Storage** - Saves tasks to a file
+- 🎭 **Intuitive Command-Based Interface**
+- 🎨 **Graphical User Interface (GUI) with JavaFX**
 
-```
-expected output
-```
+---
 
-## Feature ABC
+## 📥 **Installation & Setup**
 
-// Feature details
-
-
-## Feature XYZ
-
-// Feature details
+1. **Download the latest JAR file** from the [Releases](https://github.com/nus-cs2103-AY2425S2/ip/releases) page.
+2. **Run the application** using the terminal:
+   ```sh
+   java -jar Nyanko.jar
