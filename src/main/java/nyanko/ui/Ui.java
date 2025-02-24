@@ -4,28 +4,48 @@ import java.util.Scanner;
 
 public class Ui {
     private Scanner sc = new Scanner(System.in);
+    private String lastResponse = "";
 
+    /**
+     * Reads the next command from the user (CLI mode).
+     *
+     * @return The user input as a string.
+     */
     public String readCommand() {
         return sc.nextLine();
     }
 
     public void showWelcome() {
-        System.out.println("HEEHAW I'M NYANKO\nToday's a good day to chill and slack!\nzzzzzz");
+        lastResponse = "HEEHAW I'M NYANKO \uD83D\uDC31\nToday's a good day to chill and slack!\nzzzzzz";
+        System.out.println(lastResponse);
     }
 
-    public void showLine() {
-        System.out.println("_________________________");
-    }
-
+    /**
+     * Displays an error message.
+     *
+     * @param message The error message.
+     */
     public void showError(String message) {
+        lastResponse = message;
         System.out.println(message);
     }
 
     public void showLoadingError() {
-        System.out.println("Error loading tasks");
+        lastResponse = "Error loading tasks";
+        System.out.println(lastResponse);
     }
 
     public void showGoodbye() {
-        System.out.println("Good night... I'm going to nap zzzzz");
+        lastResponse = "Good night... I'm going to nap zzzzz";
+        System.out.println(lastResponse);
+    }
+
+    /**
+     * Retrieves the last response stored, for use in the GUI.
+     *
+     * @return The last response as a string.
+     */
+    public String getLastResponse() {
+        return lastResponse;
     }
 }

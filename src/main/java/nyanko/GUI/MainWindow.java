@@ -33,20 +33,26 @@ public class MainWindow extends AnchorPane {
     }
 
     /**
-     * Injects the Nyanko instance
+     * Injects an instance of Nyanko into the GUI.
+     *
+     * @param n The Nyanko instance.
      */
     public void setNyanko(Nyanko n) {
-        nyanko = n;
+        this.nyanko = n;
+        dialogContainer.getChildren().add(
+                DialogBox.getNyankoDialog(nyanko.getResponse(""), nyankoImage)
+        );
     }
 
+
     /**
-     * Creates two dialog boxes, one echoing user input and the other containing Duke's reply and then appends them to
-     * the dialog container. Clears the user input after processing.
+     * Handles user input and appends responses to the dialog container.
      */
     @FXML
     private void handleUserInput() {
         String input = userInput.getText();
         String response = nyanko.getResponse(input);
+
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
                 DialogBox.getNyankoDialog(response, nyankoImage)

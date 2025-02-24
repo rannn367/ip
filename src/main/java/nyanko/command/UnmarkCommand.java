@@ -21,9 +21,7 @@ public class UnmarkCommand extends Command {
         }
         Task task = tasks.getTask(index);
         task.markAsNotDone();
-        ui.showLine();
         System.out.println("I knew it! You're not done!\n  " + task.toString());
-        ui.showLine();
         storage.save(tasks.getTasks());
     }
 }

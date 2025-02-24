@@ -35,20 +35,20 @@ public class Nyanko {
         }
     }
 
+    /**
+     * Runs the CLI-based interaction loop.
+     */
     public void run() {
         ui.showWelcome();
         boolean isExit = false;
         while (!isExit) {
             try {
                 String fullCommand = ui.readCommand();
-                ui.showLine();
                 Command command = Parser.parse(fullCommand);
                 command.execute(tasks, ui, storage);
                 isExit = command.isExit();
             } catch (IOException | InvalidTaskNumberException e) {
                 ui.showError(e.getMessage());
-            } finally {
-                ui.showLine();
             }
         }
     }
@@ -58,9 +58,18 @@ public class Nyanko {
     }
 
     /**
-     * Generates a response for the user's chat message.
+     * Generates a response for the user's chat input in the GUI.
+     *
+     * @param input The user's input.
+     * @return Nyanko's response as a string.
      */
     public String getResponse(String input) {
-        return "Nyanko heard: " + input;
+        try {
+            Command command = Parser.parse(input);
+            command.execute(tasks, ui, storage);
+            return ui.getLastResponse();
+        } catch (Exception e) {
+            return "Oops! Something went wrong: " + e.getMessage();
+        }
     }
 }

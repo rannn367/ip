@@ -19,7 +19,6 @@ public class EventCommand extends Command {
     public void execute(TaskList tasks, Ui ui, Storage storage) throws IOException {
         while (true) {
             try {
-                ui.showLine();
                 System.out.println("When does it start? (format: yyyy-MM-dd HHmm)");
                 String from = ui.readCommand();
                 System.out.println("When does it end? (format: yyyy-MM-dd HHmm)");
