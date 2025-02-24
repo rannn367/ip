@@ -37,7 +37,6 @@ public class DeadlineCommand extends Command {
     public void execute(TaskList tasks, Ui ui, Storage storage) throws IOException {
         while (true) {
             try {
-                ui.showLine();
                 System.out.println("When is it due? (format: yyyy-MM-dd HHmm)");
                 String by = ui.readCommand();
                 Deadline deadline = new Deadline(description, by);

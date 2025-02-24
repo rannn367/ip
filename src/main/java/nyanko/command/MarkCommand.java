@@ -21,9 +21,7 @@ public class MarkCommand extends Command {
         }
         Task task = tasks.getTask(index);
         task.markAsDone();
-        ui.showLine();
         System.out.println("zzzz... oh WHAT you're done already?\n  " + task.toString());
-        ui.showLine();
         storage.save(tasks.getTasks());
     }
 }

@@ -11,7 +11,7 @@ import nyanko.ui.Ui;
 import java.io.IOException;
 
 /**
- * The main entry point for the Nyanko application.
+ * The main entry point for Nyanko (GUI version).
  * Nyanko is a task manager that supports ToDo, Deadline, and Event tasks.
  */
 public class Nyanko {
@@ -33,27 +33,22 @@ public class Nyanko {
             ui.showLoadingError();
             tasks = new TaskList();
         }
+        ui.showWelcome(); // Ensure welcome message is stored for GUI
     }
 
-    public void run() {
-        ui.showWelcome();
-        boolean isExit = false;
-        while (!isExit) {
-            try {
-                String fullCommand = ui.readCommand();
-                ui.showLine();
-                Command command = Parser.parse(fullCommand);
-                command.execute(tasks, ui, storage);
-                isExit = command.isExit();
-            } catch (IOException | InvalidTaskNumberException e) {
-                ui.showError(e.getMessage());
-            } finally {
-                ui.showLine();
-            }
+    /**
+     * Generates a response for the user's chat input in the GUI.
+     *
+     * @param input The user's input.
+     * @return Nyanko's response as a string.
+     */
+    public String getResponse(String input) {
+        try {
+            Command command = Parser.parse(input);
+            command.execute(tasks, ui, storage);
+            return ui.getResponse(); // Returns all responses for GUI
+        } catch (Exception e) {
+            return "Oops! Something went wrong: " + e.getMessage();
         }
-    }
-
-    public static void main(String[] args) {
-        new Nyanko("data/nyanko.txt").run();
     }
 }

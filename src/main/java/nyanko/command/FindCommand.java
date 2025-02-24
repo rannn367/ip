@@ -31,7 +31,6 @@ public class FindCommand extends Command {
      */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
-        ui.showLine();
         System.out.println("Here are the matching tasks in your list:");
 
         ArrayList<Task> matchingTasks = new ArrayList<>();
@@ -45,6 +44,5 @@ public class FindCommand extends Command {
                 System.out.println((i + 1) + "." + matchingTasks.get(i));
             }
         }
-        ui.showLine();
     }
 }
