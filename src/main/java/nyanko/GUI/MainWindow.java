@@ -39,11 +39,11 @@ public class MainWindow extends AnchorPane {
      */
     public void setNyanko(Nyanko n) {
         this.nyanko = n;
+        // Ensure welcome message appears in GUI at startup
         dialogContainer.getChildren().add(
                 DialogBox.getNyankoDialog(nyanko.getResponse(""), nyankoImage)
         );
     }
-
 
     /**
      * Handles user input and appends responses to the dialog container.
