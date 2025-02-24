@@ -47,7 +47,7 @@ test {
 }
 
 application {
-    mainClass.set("nyanko.Nyanko")
+    mainClass.set("nyanko.Launcher")
 }
 
 shadowJar {
